@@ -407,14 +407,18 @@ def budget_line(force: bool = False) -> str:
 
 
 def log_chat(direction: str, chat_id: int, user_id: int, text: str) -> None:
-    append_jsonl(DRIVE_ROOT / "logs" / "chat.jsonl", {
+    append_jsonl(DRIVE_ROOT / "logs" / f"chat_{user_id}.jsonl", {
         "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "session_id": load_state().get("session_id"),
         "direction": direction,
         "chat_id": chat_id,
         "user_id": user_id,
         "text": text,
     })
+    try:
+        from supervisor.db import log_message
+        log_message(user_id=user_id, chat_id=chat_id, direction=direction, text=text)
+    except Exception:
+        pass
 
 
 def send_with_budget(chat_id: int, text: str, log_text: Optional[str] = None,
