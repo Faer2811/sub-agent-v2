@@ -165,6 +165,9 @@ def handle_chat_direct(chat_id: int, text: str, image_data: Optional[Union[Tuple
         events = agent.handle_task(task)
         for e in events:
             get_event_q().put(e)
+        if user_id:
+            from supervisor.portrait import check_portrait_trigger
+            check_portrait_trigger(user_id)
     except Exception as e:
         import traceback
         err_msg = f"⚠️ Error: {type(e).__name__}: {e}"
