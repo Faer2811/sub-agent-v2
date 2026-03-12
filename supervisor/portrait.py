@@ -477,6 +477,19 @@ def update_user_profile(user_id: int, new_portrait: Dict[str, Any]) -> None:
     except Exception:
         log.error("Failed to save profile for user_id=%s", user_id, exc_info=True)
 
+    # Also save to PostgreSQL
+    try:
+        from supervisor.db import upsert_profile
+        portrait_status = new_portrait.get("portrait_status", "preliminary")
+        upsert_profile(
+            user_id=user_id,
+            username=username,
+            portrait_status=portrait_status,
+            portrait=new_portrait,
+        )
+    except Exception:
+        log.error("Failed to upsert profile to DB for user_id=%s", user_id, exc_info=True)
+
 
 # ---------------------------------------------------------------------------
 # check_portrait_trigger
