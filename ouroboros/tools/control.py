@@ -83,7 +83,7 @@ def _request_review(ctx: ToolContext, reason: str) -> str:
 def _chat_history(ctx: ToolContext, count: int = 100, offset: int = 0, search: str = "") -> str:
     from ouroboros.memory import Memory
     mem = Memory(drive_root=ctx.drive_root)
-    return mem.chat_history(count=count, offset=offset, search=search)
+    return mem.chat_history(count=count, offset=offset, search=search, user_id=ctx.user_id)
 
 
 def _update_scratchpad(ctx: ToolContext, content: str) -> str:

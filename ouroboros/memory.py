@@ -74,9 +74,9 @@ class Memory:
 
     # --- Chat history ---
 
-    def chat_history(self, count: int = 100, offset: int = 0, search: str = "") -> str:
+    def chat_history(self, count: int = 100, offset: int = 0, search: str = "", user_id: Optional[int] = None) -> str:
         """Read from logs/chat.jsonl. count messages, offset from end, filter by search."""
-        chat_path = self.logs_path("chat.jsonl")
+        chat_path = self.logs_path(f"chat_{user_id}.jsonl") if user_id else self.logs_path("chat.jsonl")
         if not chat_path.exists():
             return "(chat history is empty)"
 
